@@ -2,9 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import json
-import math
+import logging
 from .models import CalculationHistory
 from .serializers import CalculationHistorySerializer
+
+logger = logging.getLogger(__name__)
 
 
 class BMICalculatorView(APIView):
@@ -72,8 +74,9 @@ class BMICalculatorView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:
+            logger.exception('Unexpected error in calculator view: %s', e)
             return Response(
-                {'error': str(e)},
+                {'error': 'An internal server error occurred. Please try again later.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -153,8 +156,9 @@ class CalorieBurnView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:
+            logger.exception('Unexpected error in calculator view: %s', e)
             return Response(
-                {'error': str(e)},
+                {'error': 'An internal server error occurred. Please try again later.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -247,8 +251,9 @@ class HeartRateZoneView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:
+            logger.exception('Unexpected error in calculator view: %s', e)
             return Response(
-                {'error': str(e)},
+                {'error': 'An internal server error occurred. Please try again later.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -262,7 +267,8 @@ class CalculationHistoryView(APIView):
             serializer = CalculationHistorySerializer(history, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
+            logger.exception('Unexpected error in calculator view: %s', e)
             return Response(
-                {'error': str(e)},
+                {'error': 'An internal server error occurred. Please try again later.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
